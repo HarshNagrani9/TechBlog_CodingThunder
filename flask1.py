@@ -1,5 +1,9 @@
 from flask import Flask, render_template, request
 import mysql.connector
+import pandas as pd
+import sqlalchemy
+import pymysql
+
 
 mydb = mysql.connector.connect(
     host = "localhost",
@@ -9,9 +13,19 @@ mydb = mysql.connector.connect(
 )
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+@app.route("/", methods = ['GET', 'POST'])
+def form():
+    if (request.method == 'POST'):
+        name = request.form.get('uname')
+        password = request.form.get('psw')
+        engine = sqlalchemy.create_engine('mysql+pymysql://harsh:Rogerharsh89#@localhost:3306/mydatabase')
+        df = pd.read_sql_table("login_info", engine)
+        if((name in set(df["email"])) & (password in set(df["password"]))):
+            return render_template("index.html")
+        else:
+            return render_template("loginform.html", a = "Wrong password")
+        
+    return render_template("loginform.html")
 
 @app.route("/about")
 def about():
@@ -38,12 +52,8 @@ def contact():
         mycursor.execute(sql , val)
         print("Value inserted !")
 
+
     return render_template("contact.html")
-
-@app.route("/post")
-def post():
-    return render_template("post.html")
-
 
 if __name__ == "__main__":
     app.run(debug=True)
