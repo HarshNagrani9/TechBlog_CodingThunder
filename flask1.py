@@ -6,10 +6,10 @@ import pymysql
 
 
 mydb = mysql.connector.connect(
-    host = "localhost",
-    user = "harsh",
-    password = "Rogerharsh89#",
-    database = "mydatabase"
+    host = "sql6.freesqldatabase.com",
+    user = "sql6631415",
+    password = "WUj4HddHA2",
+    database = "sql6631415"
 )
 app = Flask(__name__)
 
@@ -18,7 +18,7 @@ def form():
     if (request.method == 'POST'):
         name = request.form.get('uname')
         password = request.form.get('psw')
-        engine = sqlalchemy.create_engine('mysql+pymysql://harsh:Rogerharsh89#@localhost:3306/mydatabase')
+        engine = sqlalchemy.create_engine('mysql+pymysql://sql6631415:WUj4HddHA2@sql6.freesqldatabase.com:3306/sql6631415')
         df = pd.read_sql_table("login_info", engine)
         if((name in set(df["email"])) & (password in set(df["password"]))):
             return render_template("index.html")
